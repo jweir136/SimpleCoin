@@ -6,6 +6,7 @@
 #include <bitset>
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 namespace Tx {
     class TxIn {
@@ -15,6 +16,14 @@ namespace Tx {
             unsigned int  amount;
             std::size_t   hash;
             std::bitset<16*sizeof(unsigned long) + 8*sizeof(std::size_t) + 8*sizeof(unsigned int)> bits;
+
+            TxIn() {
+                // SET ALL THE NULL
+                this->block = 0;
+                this->tx = 0;
+                this->amount = 0;
+                this->hash = 0;    
+            }
 
             TxIn(const unsigned long block, const unsigned long tx, const unsigned int amount) {
                 this->block = block;
@@ -80,6 +89,39 @@ namespace Tx {
                     for (int i = str.length()-1; i >= 0; i--)
                         result += str[i];
                     return result;
+            }
+    };
+
+    class TxIns {
+        public:
+            Tx::TxIn* txins;
+            std::size_t size;
+            std::size_t* hashes;
+
+            TxIns() {
+                this->txins = new Tx::TxIn[5];
+                this->size = 0;
+                this->hashes = new std::size_t[5];
+            }
+
+            void add_txin(const unsigned long block, const unsigned long tx, const unsigned int amount) {
+                if (this->size >= 5)
+                    throw std::logic_error("Error: Maximum Number of TxIn Transactions Added. Cannot add anymore.");
+                
+                this->txins[this->size] = Tx::TxIn(block, tx, amount);
+                this->hashes[this->size] = this->txins[this->size].hash;
+
+                this->size++;
+            }
+
+            void add_txin(const std::string bits) {
+                if (this->size >= 5)
+                    throw std::logic_error("Error: Maximum Number of TxIn Transactions Added. Cannot add anymore.");
+                
+                this->txins[this->size] = Tx::TxIn(bits);
+                this->hashes[this->size] = this->txins[this->size].hash;
+
+                this->size++;
             }
     };
 }

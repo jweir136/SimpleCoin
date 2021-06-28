@@ -53,6 +53,32 @@ TEST_CASE("TxIn Serialize", "[txin serialize]") {
 
 
         delete txin;
+        delete newtxin;
         
     }
+}
+
+TEST_CASE("TxIns", "[txins]") {
+    Tx::TxIns* txins = new Tx::TxIns();
+
+    srand(time(NULL));
+
+    int block;
+    int tx;
+    int amount;
+    
+
+    for (int i = 0; i < 5; i++) {
+        block = rand() % 100000000;
+        tx = rand() % 100000000;
+        amount = rand() % 1000;
+
+        txins->add_txin(block, tx, amount);
+        
+        REQUIRE(txins->txins[i].amount == amount);
+        REQUIRE(txins->txins[i].block == block);
+        REQUIRE(txins->txins[i].tx == tx);
+    }
+
+    delete txins;
 }
