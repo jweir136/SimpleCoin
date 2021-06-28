@@ -38,10 +38,10 @@ TEST_CASE("TxIn Serialize", "[txin serialize]") {
     Tx::TxIn* txin;
     Tx::TxIn* newtxin;
 
-    for (int i = 0; i < 10; i++) {
-        block = i;
-        tx = i;
-        amount = i;
+    for (int i = 0; i < 100; i++) {
+        block = rand() % 100000000;
+        tx = rand() % 100000000;
+        amount = rand() % 1000;
 
         txin = new Tx::TxIn(block, tx, amount);
         newtxin = new Tx::TxIn(txin->serialize());
