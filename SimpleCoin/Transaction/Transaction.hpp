@@ -123,6 +123,64 @@ namespace Tx {
 
                 this->size++;
             }
+
+            friend std::ostream& operator<<(std::ostream& os, const TxIns& tx) {
+                os << "TxIns<";
+                for (int i = 0; i < tx.size; i++)
+                    os << tx.txins[i] << ", ";
+                os << ">";
+
+                return os;
+            }
+    };
+
+    class TxOut {
+        public:
+            unsigned int amount;
+            unsigned int  reciever;
+            std::bitset<16*sizeof(unsigned int)> bits;
+
+            TxOut(unsigned int amount, unsigned int reciever) {
+                this->amount = amount;
+                this->reciever = reciever;
+                this->bits = std::bitset<16*sizeof(unsigned int)>();
+
+                std::string amount_bits = std::bitset<8*sizeof(unsigned int)>(this->amount).to_string();
+                for (int i = 0; i < amount_bits.length(); i++)
+                    if (amount_bits[i] == '1')
+                        this->bits.set(i);
+                std::string reciever_bits = std::bitset<8*sizeof(unsigned int)>(this->reciever).to_string();
+                for (int i = 0; i < reciever_bits.length(); i++)
+                    if (reciever_bits[i] == '1')
+                        this->bits.set(8*sizeof(unsigned int) + i);
+            }
+
+            TxOut(std::string bits) {
+                this->bits = std::bitset<16*sizeof(unsigned int)>(bits);
+
+                std::bitset<8*sizeof(unsigned int)> reciever_bits = std::bitset<8*sizeof(unsigned int)>(reverse(bits.substr(0,8*sizeof(unsigned int))));
+                this->reciever = reciever_bits.to_ulong();
+
+                std::bitset<8*sizeof(unsigned int)> amount_bits = std::bitset<8*sizeof(unsigned int)>(reverse(bits.substr(8*sizeof(unsigned int),8*sizeof(unsigned int))));
+                this->amount = amount_bits.to_ulong();
+            }
+
+            std::string serialize() {
+                return this->bits.to_string();
+            }
+
+            friend std::ostream& operator<<(std::ostream& os, const TxOut& tx) {
+                os << "TxOut<" << tx.amount << " " << tx.reciever << ">";
+                return os;
+            }
+
+        private:
+            std::string reverse(std::string str) {
+                std::string result = "";
+                for (int i = str.length()-1; i >= 0; i--)
+                    result += str[i];
+                return result;
+            }
     };
 }
 

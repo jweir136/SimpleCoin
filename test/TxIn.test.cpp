@@ -82,3 +82,39 @@ TEST_CASE("TxIns", "[txins]") {
 
     delete txins;
 }
+
+TEST_CASE("TxOut", "[txout]") {
+    Tx::TxOut* txout;
+    Tx::TxOut* newtxout;
+    unsigned int id;
+    unsigned int amount;
+
+    srand(time(NULL));
+
+    for (int i = 0; i < 10; i++) {
+        amount = rand() % 1000;
+        id = rand() % 100000000;
+
+        txout = new Tx::TxOut(amount, id);
+
+        REQUIRE(txout->amount == amount);
+        REQUIRE(txout->reciever == id);
+
+        delete txout;
+    }
+
+    for (int i = 0; i < 100; i++) {
+        amount = rand() % 1000;
+        id = rand() % 1000;
+
+        txout = new Tx::TxOut(amount, id);
+
+        newtxout = new Tx::TxOut(txout->serialize());
+
+        REQUIRE(newtxout->amount == amount);
+        REQUIRE(newtxout->reciever == id);
+
+        delete txout;
+        delete newtxout;
+    }
+}
