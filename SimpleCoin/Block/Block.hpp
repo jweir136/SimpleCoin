@@ -20,6 +20,7 @@ class Block {
         unsigned long long  nonce;
         bool                empty;
         json                json_string;
+        std::size_t         last_block;
 
         Block() {
             this->epoch = time(NULL);
@@ -27,17 +28,21 @@ class Block {
             this->hash = 0;
             this->nonce = 0;
             this->empty = true;
+            this->last_block = 0;
             
+            this->json_string["last_block"] = this->last_block;
             this->json_string["time"] = this->epoch;
             this->json_string["hash"] = this->hash;
             this->json_string["nonce"] = this->nonce;
             this->json_string["transactions"] = this->transactions;
+
         }
 
         Block(std::string json_string) {
             this->json_string = json::parse(json_string);
             this->empty = false;
             
+            this->last_block = this->json_string["last_block"];
             this->epoch = this->json_string["time"];
             this->hash = this->json_string["hash"];
             this->nonce = this->json_string["nonce"];
@@ -51,7 +56,7 @@ class Block {
         }
 
         void compute_nonce() {
-            while ((this->hash + this->nonce) % 1000 != 0) {
+            while ((this->last_block + this->hash + this->nonce) % 1000 != 0) {
                 this->nonce = rand() % 0xffffffffffffffff;
             }
         }
@@ -66,9 +71,10 @@ class Block {
         std::size_t compute_hash() {
             std::string epoch_string = std::to_string(this->epoch);
             std::string nonce_string = std::to_string(this->nonce);
+            std::string last_block_string = std::to_string(this->last_block);
             std::string trans_hash = this->json_string["transactions"].dump();
 
-            return std::hash<std::string>()(epoch_string + nonce_string + trans_hash);
+            return std::hash<std::string>()(last_block_string + epoch_string + nonce_string + trans_hash);
         }
 };
 
