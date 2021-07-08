@@ -100,3 +100,44 @@ TEST_CASE("txouts","[]") {
 
     delete txins;
 }
+
+TEST_CASE("trans", "[]") {
+    srand(time(NULL));
+    unsigned int amount;
+    unsigned long reciever;
+
+    Tx::TxOuts* txouts = new Tx::TxOuts();
+
+    unsigned long block;
+    unsigned long tx;
+
+    Tx::TxIns* txins = new Tx::TxIns();
+
+    Tx::Transaction* trans;
+    Tx::Transaction* trans2;
+
+    for (int i = 0; i < 100; i++) {
+        amount = rand() % 1000;
+        reciever = rand() % 1000;
+
+        txouts->add_txout(amount, reciever);
+
+        block = rand() % 1000;
+        tx = rand() % 1000;
+
+        txins->add_txin(amount, block, tx);
+
+        trans = new Tx::Transaction(txins->json(), txouts->json());
+        trans2 = new Tx::Transaction(trans->json());
+
+        REQUIRE(trans->epoch == trans2->epoch);
+        REQUIRE(trans->hash == trans2->hash);
+        REQUIRE(trans->txins == trans2->txins);
+        REQUIRE(trans->txouts == trans2->txouts);
+    }
+
+    delete txins;
+    delete txouts;
+    delete trans;
+    delete trans2;
+}
