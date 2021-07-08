@@ -54,3 +54,49 @@ TEST_CASE("txins","[]") {
 
     delete txins;
 }
+
+TEST_CASE("txout", "[]") {
+    srand(time(NULL));
+    unsigned int amount;
+    unsigned long reciever;
+    Tx::TxOut* txout;
+
+    for (int i = 0; i < 100; i++) {
+        amount = rand() % 10000;
+        reciever = rand() % 100000;
+
+        Tx::TxOut* txout;
+        txout = new Tx::TxOut(amount, reciever);
+        Tx::TxOut* newtxout;
+        newtxout = new Tx::TxOut(txout->json());
+
+        REQUIRE(txout->amount == newtxout->amount);
+        REQUIRE(txout->reciever == newtxout->reciever);
+
+        delete newtxout;
+        delete txout;
+    }
+}
+
+TEST_CASE("txouts","[]") {
+    srand(time(NULL));
+    unsigned int amount;
+    unsigned long reciever;
+
+    Tx::TxOuts* txins = new Tx::TxOuts();
+    Tx::TxOuts* newtxins;
+
+    for (int i = 0; i < 100; i++) {
+        amount = rand() % 10000;
+        reciever = rand() % 100000;
+
+        txins->add_txout(amount, reciever);
+        newtxins = new Tx::TxOuts(txins->json());
+
+        REQUIRE(txins->txouts == newtxins->txouts);
+
+        delete newtxins;
+    }
+
+    delete txins;
+}
