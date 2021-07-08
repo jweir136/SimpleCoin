@@ -7,8 +7,14 @@
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
+#include <ctime>
 
 namespace Tx {
+    unsigned int TXIN_BITS = 16*sizeof(unsigned long) + 8*sizeof(std::size_t) + 8*sizeof(unsigned int);
+    unsigned int TXINS_BITS = 5 * TXIN_BITS;
+    unsigned int TXOUT_BITS = 16*sizeof(unsigned int);
+    unsigned int TXOUTS_BITS = 5 * TXOUT_BITS;
+
     class TxIn {
         public:
             unsigned long block;
@@ -124,6 +130,15 @@ namespace Tx {
                 this->size++;
             }
 
+            std::string serialize() {
+                std::string txbits = "";
+
+                for (int i = 0; i < 5; i++)
+                    txbits += this->txins[i].serialize();
+
+                return txbits;
+            }
+
             friend std::ostream& operator<<(std::ostream& os, const TxIns& tx) {
                 os << "TxIns<";
                 for (int i = 0; i < tx.size; i++)
@@ -139,6 +154,12 @@ namespace Tx {
             unsigned int amount;
             unsigned int  reciever;
             std::bitset<16*sizeof(unsigned int)> bits;
+
+            TxOut() {
+                this->amount = 0;
+                this->reciever = 0;
+                this->bits = std::bitset<16*sizeof(unsigned int)>();
+            }
 
             TxOut(unsigned int amount, unsigned int reciever) {
                 this->amount = amount;
@@ -180,6 +201,97 @@ namespace Tx {
                 for (int i = str.length()-1; i >= 0; i--)
                     result += str[i];
                 return result;
+            }
+    };
+
+    class TxOuts {
+        public:
+            Tx::TxOut* txouts;
+            std::size_t size;
+
+            TxOuts() {
+                this->txouts = new Tx::TxOut[5];
+                this->size = 0;
+            }
+
+            void add_txout(const unsigned int amount, const unsigned int reciever) {
+                if (this->size >= 5)
+                    throw std::logic_error("Error: Maximum Number of TxOut Transactions Added. Cannot add anymore.");
+                
+                this->txouts[this->size] = Tx::TxOut(amount, reciever);
+
+                this->size++;
+            }
+
+            void add_txout(const std::string bits) {
+                if (this->size >= 5)
+                    throw std::logic_error("Error: Maximum Number of TxOut Transactions Added. Cannot add anymore.");
+                
+                this->txouts[this->size] = Tx::TxOut(bits);
+
+                this->size++;
+            }
+
+            std::string serialize() {
+                std::string txbits = "";
+
+                for (int i = 0; i < 5; i++)
+                    txbits += this->txouts[i].serialize();
+
+                return txbits;
+            }
+
+            friend std::ostream& operator<<(std::ostream& os, const TxOuts& tx) {
+                os << "TxOuts<";
+                for (int i = 0; i < tx.size; i++)
+                    os << tx.txouts[i] << ", ";
+                os << ">";
+
+                return os;
+            }
+    };
+
+    class Transaction {
+        public:
+            unsigned long epoch;
+            unsigned int  amount;
+            Tx::TxIns     txins;
+            Tx::TxOuts    txouts;
+            std::size_t   hash;
+            std::bitset<8*sizeof(unsigned long) + 8*sizeof(unsigned int) + 8*sizeof(Tx::TxIns) + 8*sizeof(Tx::TxOuts) + 8*sizeof(std::size_t)> bits;
+
+            Transaction(unsigned int amount, Tx::TxIns txins, Tx::TxOuts txouts) {
+                this->epoch = time(NULL);
+                this->amount = amount;
+                this->txins = txins;
+                this->txouts = txouts;
+
+                this->bits = std::bitset<8*sizeof(unsigned long) + 8*sizeof(unsigned int) + 8*sizeof(Tx::TxIns) + 8*sizeof(Tx::TxOuts) + 8*sizeof(std::size_t)>();
+
+                std::string epoch_bits = std::bitset<8*sizeof(unsigned long)>(this->epoch).to_string();
+                for (int i = 0; i < epoch_bits.length(); i++)
+                    if (epoch_bits[i] == '1')
+                        this->bits.set(i);
+
+                std::string amount_bits = std::bitset<8*sizeof(unsigned int)>(this->amount).to_string();
+                for (int i = 0; i < amount_bits.length(); i++)
+                    if (amount_bits[i] == '1')
+                        this->bits.set(8*sizeof(unsigned long) + i);
+
+                std::string hash_bits = std::bitset<8*sizeof(std::size_t)>(this->hash).to_string();
+                for (int i = 0; i < hash_bits.length(); i++)
+                    if (hash_bits[i] == '1')
+                        this->bits.set(8*(sizeof(unsigned long) + sizeof(unsigned int)) + i);
+
+                std::string txins_bits = this->txins.serialize();
+                for (int i = 0; i < txins_bits.length(); i++)
+                    if (txins_bits[i] == '1')
+                        this->bits.set(8*(sizeof(unsigned long) + sizeof(unsigned int) + sizeof(std::size_t)) + i);
+
+                std::string txouts_bits = this->txouts.serialize();
+                for (int i = 0; i < txouts_bits.length(); i++)
+                    if (txouts_bits[i] == '1')
+                        this->bits.set(8*(sizeof(unsigned long) + sizeof(unsigned int) + sizeof(std::size_t)) + txins_bits.length() + i);
             }
     };
 }

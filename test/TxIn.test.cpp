@@ -118,3 +118,25 @@ TEST_CASE("TxOut", "[txout]") {
         delete newtxout;
     }
 }
+
+TEST_CASE("TxOuts", "[txouts]") {
+    Tx::TxOuts* txouts = new Tx::TxOuts();
+
+    srand(time(NULL));
+
+    unsigned int id;
+    unsigned int amount;
+    
+
+    for (int i = 0; i < 5; i++) {
+        amount = rand() % 1000;
+        id = rand() % 1000;
+
+        txouts->add_txout(amount, id);
+        
+        REQUIRE(txouts->txouts[i].amount == amount);
+        REQUIRE(txouts->txouts[i].reciever == id);
+    }
+
+    delete txouts;
+}
