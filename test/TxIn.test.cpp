@@ -29,3 +29,28 @@ TEST_CASE("txin", "[]") {
         delete txin;
     }
 }
+
+TEST_CASE("txins","[]") {
+    srand(time(NULL));
+    unsigned int amount;
+    unsigned long block;
+    unsigned long tx;
+
+    Tx::TxIns* txins = new Tx::TxIns();
+    Tx::TxIns* newtxins;
+
+    for (int i = 0; i < 100; i++) {
+        amount = rand() % 10000;
+        block = rand() % 100000;
+        tx = rand() % 10000;
+
+        txins->add_txin(amount, block, tx);
+        newtxins = new Tx::TxIns(txins->json());
+
+        REQUIRE(txins->txins == newtxins->txins);
+
+        delete newtxins;
+    }
+
+    delete txins;
+}

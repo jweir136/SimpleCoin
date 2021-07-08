@@ -1,14 +1,10 @@
 #ifndef TRANSACTION_HPP
 #define TRANSACTION_HPP
 
-#include <functional>
 #include <string>
-#include <bitset>
 #include <iostream>
-#include <cmath>
-#include <stdexcept>
-#include <ctime>
-#include <regex>
+#include <vector>
+#include <iterator>
 #include <include/json/json.hpp>
 
 using namespace nlohmann;
@@ -41,6 +37,32 @@ namespace Tx {
 
             std::string json() {
                 return this->json_string.dump();
+            }
+    };
+
+    class TxIns {
+        public:
+            json txins;
+
+            TxIns() {
+                this->txins = {};
+            }
+
+            TxIns(std::string json_string) {
+                this->txins = json::parse(json_string);
+            }
+
+            void add_txin(unsigned int amount, unsigned long block, unsigned long tx) {
+                Tx::TxIn txin = Tx::TxIn(amount, block, tx);
+                this->txins.push_back(txin.json());
+            }
+
+            void add_txin(std::string json_string) {
+                this->txins.push_back(json_string);
+            }
+
+            std::string json() {
+                return this->txins.dump();
             }
     };
 }
