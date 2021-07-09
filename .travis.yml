@@ -5,4 +5,5 @@ os:
 compiler:
   - gcc
 script:
-  - make build && make check
+  - cd include/cryptopp && make && make test && sudo make install
+  - cd ../.. && make build && make check
