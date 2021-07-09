@@ -45,7 +45,7 @@ TEST_CASE("blockchain", "[]") {
         REQUIRE(chain->hash == chain2->hash);
     }
 
-    chain->verify();
+    REQUIRE(chain->verify() == false);
 
     delete txins;
     delete txouts;
