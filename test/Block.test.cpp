@@ -32,10 +32,10 @@ TEST_CASE("block", "[]") {
 
         txins->add_txin(amount, block, tx);
 
-        trans = new Tx::Transaction(txins->json(), txouts->json());
-        blockobj->add_transaction(trans->json());
+        trans = new Tx::Transaction(txins->to_json(), txouts->to_json());
+        blockobj->add_transaction(trans->to_json());
 
-        blockobj2 = new Block(blockobj->json());
+        blockobj2 = new Block(blockobj->to_json());
 
         REQUIRE(blockobj->epoch == blockobj2->epoch);
         REQUIRE(blockobj->hash == blockobj2->hash);
@@ -78,8 +78,8 @@ TEST_CASE("nonce", "[]") {
 
         txins->add_txin(amount, block, tx);
 
-        trans = new Tx::Transaction(txins->json(), txouts->json());
-        blockobj->add_transaction(trans->json());
+        trans = new Tx::Transaction(txins->to_json(), txouts->to_json());
+        blockobj->add_transaction(trans->to_json());
         blockobj->compute_nonce();
 
         REQUIRE((blockobj->hash + blockobj->nonce) % 1000 == 0);

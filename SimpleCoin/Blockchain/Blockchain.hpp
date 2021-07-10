@@ -55,7 +55,7 @@ class Blockchain {
             return true;
         }
 
-        std::string json() {
+        std::string to_json() {
             return this->json_string.dump();
         }
 };

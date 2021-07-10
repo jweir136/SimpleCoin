@@ -34,12 +34,12 @@ TEST_CASE("blockchain", "[]") {
 
         txins->add_txin(amount, block, tx);
 
-        trans = new Tx::Transaction(txins->json(), txouts->json());
-        blockobj->add_transaction(trans->json());
+        trans = new Tx::Transaction(txins->to_json(), txouts->to_json());
+        blockobj->add_transaction(trans->to_json());
 
-        chain->add_block(blockobj->json());
+        chain->add_block(blockobj->to_json());
 
-        chain2 = new Blockchain(chain->json());
+        chain2 = new Blockchain(chain->to_json());
 
         REQUIRE(chain->blocks == chain2->blocks);
         REQUIRE(chain->hash == chain2->hash);

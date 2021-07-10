@@ -61,7 +61,7 @@ class Block {
             }
         }
 
-        std::string json() {
+        std::string to_json() {
             this->json_string["hash"] = compute_hash();
 
             return this->json_string.dump();

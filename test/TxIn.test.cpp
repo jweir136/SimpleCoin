@@ -19,7 +19,7 @@ TEST_CASE("txin", "[]") {
         Tx::TxIn* txin;
         txin = new Tx::TxIn(amount, block, tx);
         Tx::TxIn* newtxin;
-        newtxin = new Tx::TxIn(txin->json());
+        newtxin = new Tx::TxIn(txin->to_json());
 
         REQUIRE(txin->amount == newtxin->amount);
         REQUIRE(txin->block == newtxin->block);
@@ -45,7 +45,7 @@ TEST_CASE("txins","[]") {
         tx = rand() % 10000;
 
         txins->add_txin(amount, block, tx);
-        newtxins = new Tx::TxIns(txins->json());
+        newtxins = new Tx::TxIns(txins->to_json());
 
         REQUIRE(txins->txins == newtxins->txins);
 
@@ -68,7 +68,7 @@ TEST_CASE("txout", "[]") {
         Tx::TxOut* txout;
         txout = new Tx::TxOut(amount, reciever);
         Tx::TxOut* newtxout;
-        newtxout = new Tx::TxOut(txout->json());
+        newtxout = new Tx::TxOut(txout->to_json());
 
         REQUIRE(txout->amount == newtxout->amount);
         REQUIRE(txout->reciever == newtxout->reciever);
@@ -91,7 +91,7 @@ TEST_CASE("txouts","[]") {
         reciever = rand() % 100000;
 
         txins->add_txout(amount, reciever);
-        newtxins = new Tx::TxOuts(txins->json());
+        newtxins = new Tx::TxOuts(txins->to_json());
 
         REQUIRE(txins->txouts == newtxins->txouts);
 
@@ -127,8 +127,8 @@ TEST_CASE("trans", "[]") {
 
         txins->add_txin(amount, block, tx);
 
-        trans = new Tx::Transaction(txins->json(), txouts->json());
-        trans2 = new Tx::Transaction(trans->json());
+        trans = new Tx::Transaction(txins->to_json(), txouts->to_json());
+        trans2 = new Tx::Transaction(trans->to_json());
 
         REQUIRE(trans->epoch == trans2->epoch);
         REQUIRE(trans->hash == trans2->hash);

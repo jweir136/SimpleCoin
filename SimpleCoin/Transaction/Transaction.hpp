@@ -54,7 +54,7 @@ namespace Tx {
              * @brief Returns the json data from the instance. This is to be used to store, transfer, and serialize TxIn object.
              * @return Returns the json data in string format.
              */ 
-            std::string json() {
+            std::string to_json() {
                 return this->json_string.dump();
             }
     };
@@ -89,7 +89,7 @@ namespace Tx {
              */ 
             void add_txin(unsigned int amount, unsigned long block, unsigned long tx) {
                 Tx::TxIn txin = Tx::TxIn(amount, block, tx);
-                this->txins.push_back(txin.json());
+                this->txins.push_back(txin.to_json());
             }
 
             /**
@@ -104,7 +104,7 @@ namespace Tx {
              * @brief Returns a json serialization of the TxIns object. This is mostly just a list of the TxIn objects.
              * @return Returns the json data in string format.
              */ 
-            std::string json() {
+            std::string to_json() {
                 return this->txins.dump();
             }
     };
@@ -146,7 +146,7 @@ namespace Tx {
              * @brief Returns the json data to the TxOut object.
              * @return Returns a string representing the JSON data.
              */
-            std::string json() {
+            std::string to_json() {
                 return this->json_string.dump();
             }
     };
@@ -180,7 +180,7 @@ namespace Tx {
              */
             void add_txout(unsigned int amount, unsigned long reciever) {
                 Tx::TxOut txout = Tx::TxOut(amount, reciever);
-                this->txouts.push_back(txout.json());
+                this->txouts.push_back(txout.to_json());
             }
 
             /**
@@ -195,7 +195,7 @@ namespace Tx {
              * @brief Serializes the TxOuts data and returns the JSON data.
              * @return Returns the JSON data corresponding to the TxOuts object.
              */
-            std::string json() {
+            std::string to_json() {
                 return this->txouts.dump();
             }
     };
@@ -248,7 +248,7 @@ namespace Tx {
              * @brief Serializes the Transaction object and returns the JSON data as a string.
              * @return Returns a string representing the serialized Transaction object.
              */
-            std::string json() {
+            std::string to_json() {
                 return this->json_string.dump();
             }   
     };
