@@ -9,6 +9,7 @@ TEST_CASE("block", "[]") {
     srand(time(NULL));
     unsigned int amount;
     unsigned long reciever;
+    std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txouts = new Tx::TxOuts();
 
@@ -32,7 +33,7 @@ TEST_CASE("block", "[]") {
 
         txins->add_txin(amount, block, tx);
 
-        trans = new Tx::Transaction(txins->to_json(), txouts->to_json());
+        trans = new Tx::Transaction(txins->to_json(), txouts->to_json(), author);
         blockobj->add_transaction(trans->to_json());
 
         blockobj2 = new Block(blockobj->to_json());

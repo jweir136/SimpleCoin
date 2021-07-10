@@ -206,6 +206,7 @@ namespace Tx {
      */
     class Transaction {
         public:
+            std::string     author_key;
             std::size_t     hash;
             unsigned long   epoch;
             json            txins;
@@ -216,15 +217,18 @@ namespace Tx {
              * @brief Initialize a Transaction using the JSON data from both a TxIns object and a TxOuts object.
              * @param txins This is the JSON data for a TxIns object, the inputed tokens.
              * @param txouts This is the JSON data for a TxOuts object, the output locations of the tokens.
+             * @param author_key This is the PEM string for the public key of the user writing this Transaction.
              */
-            Transaction(std::string txins, std::string txouts) {
+            Transaction(std::string txins, std::string txouts, std::string author_key) {
                 this->epoch = time(NULL);
                 this->txins = json::parse(txins);
                 this->txouts = json::parse(txouts);
+                this->author_key = author_key;
 
                 this->json_string["time"] = this->epoch;
                 this->json_string["txins"] = this->txins;
                 this->json_string["txouts"] = this->txouts;
+                this->json_string["author_key"] = this->author_key;
 
                 this->hash = std::hash<std::string>()(this->json_string.dump());
 
@@ -242,6 +246,7 @@ namespace Tx {
                 this->txins = this->json_string["txins"];
                 this->txouts = this->json_string["txouts"];
                 this->hash = this->json_string["hash"];
+                this->author_key = this->json_string["author_key"];
             }  
 
             /**

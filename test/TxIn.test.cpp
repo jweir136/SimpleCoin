@@ -105,6 +105,7 @@ TEST_CASE("trans", "[]") {
     srand(time(NULL));
     unsigned int amount;
     unsigned long reciever;
+    std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txouts = new Tx::TxOuts();
 
@@ -127,13 +128,14 @@ TEST_CASE("trans", "[]") {
 
         txins->add_txin(amount, block, tx);
 
-        trans = new Tx::Transaction(txins->to_json(), txouts->to_json());
+        trans = new Tx::Transaction(txins->to_json(), txouts->to_json(), author);
         trans2 = new Tx::Transaction(trans->to_json());
 
         REQUIRE(trans->epoch == trans2->epoch);
         REQUIRE(trans->hash == trans2->hash);
         REQUIRE(trans->txins == trans2->txins);
         REQUIRE(trans->txouts == trans2->txouts);
+        REQUIRE(trans->author_key == trans2->author_key);
     }
 
     delete txins;

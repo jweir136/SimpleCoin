@@ -74,6 +74,20 @@
         "numeric": "cpp",
         "random": "cpp",
         "cinttypes": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "codecvt": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "condition_variable": "cpp",
+        "list": "cpp",
+        "numbers": "cpp",
+        "queue": "cpp",
+        "regex": "cpp",
+        "semaphore": "cpp",
+        "thread": "cpp",
+        "unordered_set": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "stop_token": "cpp"
     }
 }
