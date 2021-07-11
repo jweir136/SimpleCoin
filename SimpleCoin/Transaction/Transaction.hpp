@@ -116,7 +116,7 @@ namespace Tx {
     class TxOut {
         public:
             unsigned int    amount;
-            unsigned long   reciever;
+            std::string     reciever;
             json            json_string;
 
             /**
@@ -124,7 +124,7 @@ namespace Tx {
              * @param amount This is the number of tokens to give to the reciever.
              * @param reciever This is the public key of the user to give tokens to.
              */ 
-            TxOut(unsigned int amount, unsigned long reciever) {
+            TxOut(unsigned int amount, std::string reciever) {
                 this->amount = amount;
                 this->reciever = reciever;
 
@@ -179,7 +179,7 @@ namespace Tx {
              * @param amount This is the number of tokens to send to the reciever.
              * @param reciever This is the public key belonging to the user the tokens should be sent to.
              */
-            void add_txout(unsigned int amount, unsigned long reciever) {
+            void add_txout(unsigned int amount, std::string reciever) {
                 Tx::TxOut txout = Tx::TxOut(amount, reciever);
                 this->txouts.push_back(txout.to_json());
             }

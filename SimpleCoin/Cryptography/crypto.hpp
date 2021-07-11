@@ -64,7 +64,7 @@ namespace ECDSA {
         return signature;
     }
 
-    inline bool verify(std::string pub_key_filepath, std::string expected, std::string signature) {
+    inline bool verify(std::string pub_key_filepath, std::string expected, std::string signature, bool use_file = true) {
         FILE* f = fopen(pub_key_filepath.c_str(), "r");
         EC_KEY* ec_key = PEM_read_EC_PUBKEY(f, NULL, NULL, NULL);
         fclose(f);

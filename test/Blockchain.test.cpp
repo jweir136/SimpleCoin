@@ -9,7 +9,7 @@
 TEST_CASE("blockchain", "[]") {
     srand(time(NULL));
     unsigned int amount;
-    unsigned long reciever;
+    std::string reciever = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
     std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txouts = new Tx::TxOuts();
@@ -26,7 +26,6 @@ TEST_CASE("blockchain", "[]") {
 
     for (int i = 0; i < 100; i++) {
         amount = rand() % 1000;
-        reciever = rand() % 1000;
 
         txouts->add_txout(amount, reciever);
 

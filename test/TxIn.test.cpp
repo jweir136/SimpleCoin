@@ -58,12 +58,11 @@ TEST_CASE("txins","[]") {
 TEST_CASE("txout", "[]") {
     srand(time(NULL));
     unsigned int amount;
-    unsigned long reciever;
+    std::string reciever = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
     Tx::TxOut* txout;
 
     for (int i = 0; i < 100; i++) {
         amount = rand() % 10000;
-        reciever = rand() % 100000;
 
         Tx::TxOut* txout;
         txout = new Tx::TxOut(amount, reciever);
@@ -81,14 +80,13 @@ TEST_CASE("txout", "[]") {
 TEST_CASE("txouts","[]") {
     srand(time(NULL));
     unsigned int amount;
-    unsigned long reciever;
+    std::string reciever = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txins = new Tx::TxOuts();
     Tx::TxOuts* newtxins;
 
     for (int i = 0; i < 100; i++) {
         amount = rand() % 10000;
-        reciever = rand() % 100000;
 
         txins->add_txout(amount, reciever);
         newtxins = new Tx::TxOuts(txins->to_json());
@@ -104,7 +102,7 @@ TEST_CASE("txouts","[]") {
 TEST_CASE("trans", "[]") {
     srand(time(NULL));
     unsigned int amount;
-    unsigned long reciever;
+    std::string reciever = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
     std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txouts = new Tx::TxOuts();
@@ -119,7 +117,6 @@ TEST_CASE("trans", "[]") {
 
     for (int i = 0; i < 100; i++) {
         amount = rand() % 1000;
-        reciever = rand() % 1000;
 
         txouts->add_txout(amount, reciever);
 

@@ -8,7 +8,7 @@
 TEST_CASE("block", "[]") {
     srand(time(NULL));
     unsigned int amount;
-    unsigned long reciever;
+    std::string reciever = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
     std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txouts = new Tx::TxOuts();
@@ -24,7 +24,6 @@ TEST_CASE("block", "[]") {
 
     for (int i = 0; i < 100; i++) {
         amount = rand() % 1000;
-        reciever = rand() % 1000;
 
         txouts->add_txout(amount, reciever);
 
@@ -49,46 +48,3 @@ TEST_CASE("block", "[]") {
     delete blockobj;
     delete blockobj2;
 };
-
-/*
-TEST_CASE("nonce", "[]") {
-    std::cout << "Computing Nonce..." << std::endl;
-
-    srand(time(NULL));
-    unsigned int amount;
-    unsigned long reciever;
-
-    Tx::TxOuts* txouts = new Tx::TxOuts();
-
-    unsigned long block;
-    unsigned long tx;
-
-    Tx::TxIns* txins = new Tx::TxIns();
-
-    Tx::Transaction* trans;
-    Block* blockobj = new Block();
-
-    for (int i = 0; i < 1; i++) {
-        amount = rand() % 1000;
-        reciever = rand() % 1000;
-
-        txouts->add_txout(amount, reciever);
-
-        block = rand() % 1000;
-        tx = rand() % 1000;
-
-        txins->add_txin(amount, block, tx);
-
-        trans = new Tx::Transaction(txins->to_json(), txouts->to_json());
-        blockobj->add_transaction(trans->to_json());
-        blockobj->compute_nonce();
-
-        REQUIRE((blockobj->hash + blockobj->nonce) % 1000 == 0);
-    }
-
-    delete txins;
-    delete txouts;
-    delete trans;
-    delete blockobj;
-}
-*/
