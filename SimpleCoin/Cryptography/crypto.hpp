@@ -8,7 +8,7 @@
 
 namespace ECDSA {
 
-    void generate_keys(std::string pub_key_filepath, std::string priv_key_filepath) {
+    inline void generate_keys(std::string pub_key_filepath, std::string priv_key_filepath) {
         EC_KEY* ec_key = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
 
         if (!EC_KEY_generate_key(ec_key))
@@ -33,7 +33,7 @@ namespace ECDSA {
         EC_KEY_free(ec_key);
     }
 
-    std::string sign(const std::string priv_key_filepath, const std::string input) {
+    inline std::string sign(const std::string priv_key_filepath, const std::string input) {
         std::string signature;
 
         FILE* f = fopen(priv_key_filepath.c_str(), "r");
@@ -64,7 +64,7 @@ namespace ECDSA {
         return signature;
     }
 
-    bool verify(std::string pub_key_filepath, std::string expected, std::string signature) {
+    inline bool verify(std::string pub_key_filepath, std::string expected, std::string signature) {
         FILE* f = fopen(pub_key_filepath.c_str(), "r");
         EC_KEY* ec_key = PEM_read_EC_PUBKEY(f, NULL, NULL, NULL);
         fclose(f);

@@ -7,6 +7,7 @@
 #include <iterator>
 #include <functional>
 #include <include/json/json.hpp>
+#include <SimpleCoin/Cryptography/crypto.hpp>
 
 using namespace nlohmann;
 
@@ -207,6 +208,7 @@ namespace Tx {
     class Transaction {
         public:
             std::string     author_key;
+            std::string     signature;
             std::size_t     hash;
             unsigned long   epoch;
             json            txins;
@@ -224,11 +226,13 @@ namespace Tx {
                 this->txins = json::parse(txins);
                 this->txouts = json::parse(txouts);
                 this->author_key = author_key;
+                this->signature = "";
 
                 this->json_string["time"] = this->epoch;
                 this->json_string["txins"] = this->txins;
                 this->json_string["txouts"] = this->txouts;
                 this->json_string["author_key"] = this->author_key;
+                this->json_string["signature"] = this->signature;
 
                 this->hash = std::hash<std::string>()(this->json_string.dump());
 
@@ -247,6 +251,7 @@ namespace Tx {
                 this->txouts = this->json_string["txouts"];
                 this->hash = this->json_string["hash"];
                 this->author_key = this->json_string["author_key"];
+                this->signature = this->json_string["signature"];
             }  
 
             /**
@@ -256,6 +261,11 @@ namespace Tx {
             std::string to_json() {
                 return this->json_string.dump();
             }   
+
+            void sign_transaction(std::string private_key_filepath) {
+                this->signature = ECDSA::sign(private_key_filepath, std::to_string(this->hash));
+                this->json_string["signature"] = this->signature;
+            }
     };
 }
 
