@@ -22,7 +22,7 @@ TEST_CASE("block", "[]") {
     Block* blockobj = new Block();
     Block* blockobj2;
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10; i++) {
         amount = rand() % 1000;
 
         txouts->add_txout(amount, reciever);

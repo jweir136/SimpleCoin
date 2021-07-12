@@ -5,10 +5,20 @@
 #include <string>
 
 TEST_CASE("signing", "[]") {
-    std::string test = "abc";
+    std::string test = std::to_string(123);
 
     ECDSA::generate_keys("test/Cryptography/pub.pem", "test/Cryptography/priv.pem");
     std::string sig = ECDSA::sign("test/Cryptography/priv.pem", test);
 
     REQUIRE(ECDSA::verify("test/Cryptography/pub.pem", test, sig));
+};
+
+TEST_CASE("signing-with-string", "[]") {
+    std::string test = "abc";
+    std::string reciever = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
+
+    std::string sig = ECDSA::sign("test/Cryptography/priv.pem", test);
+
+    bool passed = ECDSA::verify_from_string(reciever, test, sig);
+    REQUIRE(passed);
 };

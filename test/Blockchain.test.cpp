@@ -24,7 +24,7 @@ TEST_CASE("blockchain", "[]") {
     Blockchain* chain = new Blockchain();
     Blockchain* chain2;
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10; i++) {
         amount = rand() % 1000;
 
         txouts->add_txout(amount, reciever);

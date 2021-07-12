@@ -266,6 +266,10 @@ namespace Tx {
                 this->signature = ECDSA::sign(private_key_filepath, std::to_string(this->hash));
                 this->json_string["signature"] = this->signature;
             }
+
+            bool verify_transaction() {
+                return ECDSA::verify_from_string(this->author_key, std::to_string(this->hash), this->signature);
+            }
     };
 }
 
