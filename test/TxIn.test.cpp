@@ -91,7 +91,7 @@ TEST_CASE("txouts","[]") {
         txins->add_txout(amount, reciever);
         newtxins = new Tx::TxOuts(txins->to_json());
 
-        REQUIRE(txins->txouts == newtxins->txouts);
+        REQUIRE(txins->json_string == newtxins->json_string);
 
         delete newtxins;
     }

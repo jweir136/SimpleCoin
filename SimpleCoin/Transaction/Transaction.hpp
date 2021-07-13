@@ -157,13 +157,16 @@ namespace Tx {
      */
     class TxOuts {
         public:
-            json txouts;
+            json            json_string;
+            unsigned long   total;
 
             /**
              * @brief Initialize an empty TxOuts object containing no TxOut objects.
              */
             TxOuts() {
-                this->txouts = {};
+                this->json_string["txouts"] = {};
+                this->total = 0;
+                this->json_string["total"] = this->total;
             }
 
             /**
@@ -171,7 +174,8 @@ namespace Tx {
              * @param json_string This is the JSON data to use to initialize the object.
              */
             TxOuts(std::string json_string) {
-                this->txouts = json::parse(json_string);
+                this->json_string = json::parse(json_string);
+                this->total = this->json_string["total"];
             }
 
             /**
@@ -181,7 +185,9 @@ namespace Tx {
              */
             void add_txout(unsigned int amount, std::string reciever) {
                 Tx::TxOut txout = Tx::TxOut(amount, reciever);
-                this->txouts.push_back(txout.to_json());
+                this->json_string["txouts"].push_back(txout.to_json());
+                this->total += amount;
+                this->json_string["total"] = this->total;
             }
 
             /**
@@ -189,7 +195,8 @@ namespace Tx {
              * @param json_string This is the JSON data representing a serialized TxOut instance.
              */
             void add_txout(std::string json_string) {
-                this->txouts.push_back(json_string);
+                this->json_string["txouts"].push_back(json_string);
+                this->total += (unsigned long)json::parse(json_string)["amount"];
             }
 
             /**
@@ -197,7 +204,7 @@ namespace Tx {
              * @return Returns the JSON data corresponding to the TxOuts object.
              */
             std::string to_json() {
-                return this->txouts.dump();
+                return this->json_string.dump();
             }
     };
 
