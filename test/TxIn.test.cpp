@@ -103,7 +103,7 @@ TEST_CASE("trans", "[]") {
     srand(time(NULL));
     unsigned int amount;
     std::string reciever = "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+giOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==-----END PUBLIC KEY-----";
-    std::string author = "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+giOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==-----END PUBLIC KEY-----";
+    std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAED9y4qJt/O+YyHJJcEpca5Trtc3gD\nH5mpT2Ef3SabY++EDnAdEXCghugxnh/mVAUrCxIngNQcU2uSs5S5kN9xww==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txouts = new Tx::TxOuts();
 
@@ -135,6 +135,8 @@ TEST_CASE("trans", "[]") {
         REQUIRE(trans->txins == trans2->txins);
         REQUIRE(trans->txouts == trans2->txouts);
         REQUIRE(trans->author_key == trans2->author_key);
+
+        REQUIRE(trans->verify_transaction());
     }
 
     delete txins;
