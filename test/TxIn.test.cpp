@@ -47,7 +47,7 @@ TEST_CASE("txins","[]") {
         txins->add_txin(amount, block, tx);
         newtxins = new Tx::TxIns(txins->to_json());
 
-        REQUIRE(txins->txins == newtxins->txins);
+        REQUIRE(txins->json_string == newtxins->json_string);
 
         delete newtxins;
     }

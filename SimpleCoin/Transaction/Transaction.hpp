@@ -65,13 +65,16 @@ namespace Tx {
      */ 
     class TxIns {
         public:
-            json txins;
+            json            json_string;
+            unsigned long   total;
 
             /**
              * @brief Creates an empty TxIns object.
              */
             TxIns() {
-                this->txins = {};
+                this->json_string["txins"] = {};
+                this->total = 0;
+                this->json_string["total"] = this->total;
             }
 
             /**
@@ -79,7 +82,8 @@ namespace Tx {
              * @param json_string The json data to use to initialize the object.
              */ 
             TxIns(std::string json_string) {
-                this->txins = json::parse(json_string);
+                this->json_string = json::parse(json_string);
+                this->total = this->json_string["total"];
             }
 
             /**
@@ -90,7 +94,9 @@ namespace Tx {
              */ 
             void add_txin(unsigned int amount, unsigned long block, unsigned long tx) {
                 Tx::TxIn txin = Tx::TxIn(amount, block, tx);
-                this->txins.push_back(txin.to_json());
+                this->json_string["txins"].push_back(txin.to_json());
+                this->total += amount;
+                this->json_string["total"] = this->total;
             }
 
             /**
@@ -98,7 +104,9 @@ namespace Tx {
              * @param json_string The json data from the TxIn object.
              */ 
             void add_txin(std::string json_string) {
-                this->txins.push_back(json_string);
+                this->json_string["txins"].push_back(json_string);
+                this->total += (unsigned long)this->json_string["total"];
+                this->json_string["total"] = this->total;
             }
 
             /**
@@ -106,7 +114,7 @@ namespace Tx {
              * @return Returns the json data in string format.
              */ 
             std::string to_json() {
-                return this->txins.dump();
+                return this->json_string.dump();
             }
     };
 
