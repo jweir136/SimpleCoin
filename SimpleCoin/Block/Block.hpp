@@ -15,7 +15,6 @@ using namespace nlohmann;
 class Block {
     public:
         unsigned long       epoch;
-        json                transactions;
         std::size_t         hash;
         unsigned long long  nonce;
         bool                empty;
@@ -24,7 +23,6 @@ class Block {
 
         Block() {
             this->epoch = time(NULL);
-            this->transactions = {};
             this->hash = 0;
             this->nonce = 0;
             this->empty = true;
@@ -34,8 +32,6 @@ class Block {
             this->json_string["time"] = this->epoch;
             this->json_string["hash"] = this->hash;
             this->json_string["nonce"] = this->nonce;
-            this->json_string["transactions"] = this->transactions;
-
         }
 
         Block(std::string json_string) {
@@ -46,11 +42,11 @@ class Block {
             this->epoch = this->json_string["time"];
             this->hash = this->json_string["hash"];
             this->nonce = this->json_string["nonce"];
-            this->transactions = this->json_string["transactions"];
         }
 
         void add_transaction(std::string transaction_json) {
-            this->json_string["transactions"].push_back(transaction_json);
+            std::size_t transaction_hash = json::parse(transaction_json)["hash"];
+            this->json_string["transactions"][std::to_string(transaction_hash)] = transaction_json;
             this->hash = compute_hash();
             this->json_string["hash"] = this->hash;
         }
@@ -65,6 +61,10 @@ class Block {
             this->json_string["hash"] = compute_hash();
 
             return this->json_string.dump();
+        }
+
+        std::string get_transaction(std::string hash) {
+            return this->json_string["transactions"][hash];
         }
 
     private:

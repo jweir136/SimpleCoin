@@ -40,6 +40,7 @@ TEST_CASE("block", "[]") {
         REQUIRE(blockobj->epoch == blockobj2->epoch);
         REQUIRE(blockobj->hash == blockobj2->hash);
         REQUIRE(blockobj->nonce == blockobj2->nonce);
+        REQUIRE(blockobj->get_transaction(std::to_string(trans->hash)) == trans->to_json());
     }
 
     delete txins;
