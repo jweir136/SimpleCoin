@@ -137,6 +137,7 @@ TEST_CASE("trans", "[]") {
         REQUIRE(trans->author_key == trans2->author_key);
 
         REQUIRE(trans->verify_transaction());
+        REQUIRE(trans->is_balanced());
     }
 
     delete txins;

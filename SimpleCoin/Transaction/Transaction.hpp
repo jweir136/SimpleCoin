@@ -285,6 +285,10 @@ namespace Tx {
             bool verify_transaction() {
                 return ECDSA::verify_from_string(this->author_key, std::to_string(this->hash), this->signature);
             }
+
+            bool is_balanced() {
+                return (unsigned long)this->txins["total"] == (unsigned long)this->txouts["total"];
+            }
     };
 }
 
