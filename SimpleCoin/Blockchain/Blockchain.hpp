@@ -55,10 +55,6 @@ class Blockchain {
             return true;
         }
 
-        std::string to_json() {
-            return this->json_string.dump();
-        }
-
         std::string get_block(std::size_t hash) {
             for (int i = 0; i < this->size; i++) {
                 auto block = this->json_string["blocks"][i];
@@ -67,6 +63,10 @@ class Blockchain {
             }
 
             return NULL;
+        }
+
+        std::string to_json() {
+            return this->json_string.dump();
         }
 };
 
