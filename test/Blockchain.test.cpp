@@ -61,11 +61,12 @@ TEST_CASE("mock-blockchain", "[]") {
         block.add_transaction(jake_to_ryan.to_json());
         block.add_transaction(jake_to_katie.to_json());
         block.add_transaction(jake_to_ethan.to_json());
+        block.compute_nonce();
 
         chain.add_block(block.to_json());
     }
 
-    std::cout << chain.size << std::endl;
+    std::cout << chain.verify() << std::endl;
 };
 
 TEST_CASE("blockchain", "[]") {

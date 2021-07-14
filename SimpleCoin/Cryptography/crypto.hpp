@@ -48,7 +48,7 @@ namespace ECDSA {
         FILE* f = fopen(priv_key_filepath.c_str(), "r");
 
         if (!f)
-            throw std::runtime_error("Error: Failed to open PEM file.");
+            throw std::runtime_error("Error: Failed to open pem");
 
         EC_KEY* ec_key = PEM_read_ECPrivateKey(f, NULL, NULL, NULL);
 

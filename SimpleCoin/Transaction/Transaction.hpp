@@ -282,8 +282,8 @@ namespace Tx {
                     ERROR SIGNATURE : DOESN'T HAVE 
                 */
                 this->signature = ECDSA::sign(private_key_filepath, std::to_string(this->hash));
-                std::u32string s32(this->signature.begin(), this->signature.end());
-                this->json_string["signature"] = s32;
+                std::cout << this->signature << std::endl;
+                this->json_string["signature"] = this->signature;
             }
 
             bool verify_transaction() {
