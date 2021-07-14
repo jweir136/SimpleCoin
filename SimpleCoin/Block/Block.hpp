@@ -59,7 +59,7 @@ class Block {
 
         void compute_nonce() {
             std::size_t current_hash = std::hash<std::string>()(std::to_string(this->last_block) + std::to_string(this->hash) + std::to_string(this->nonce));
-            while (current_hash % 1000 == 0)
+            while (current_hash % 1000 != 0)
                 this->nonce = rand() % 0xffffffffffffffff;
         }
 

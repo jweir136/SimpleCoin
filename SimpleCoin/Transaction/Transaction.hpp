@@ -6,6 +6,15 @@
 #include <vector>
 #include <iterator>
 #include <functional>
+#include <locale>         // std::wstring_convert
+#include <codecvt>        // std::codecvt_utf8
+#include <cstdint>  
+#include <stdexcept>
+#include <sstream>
+#include <iomanip>
+#include <string>
+#include <cstdint>
+#include <iostream>
 #include <include/json/json.hpp>
 #include <SimpleCoin/Cryptography/crypto.hpp>
 
@@ -247,7 +256,7 @@ namespace Tx {
                 this->json_string["txins"] = this->txins;
                 this->json_string["txouts"] = this->txouts;
                 this->json_string["author_key"] = this->author_key;
-                this->json_string["signature"] = this->signature;
+                this->json_string["signature"] = hex_to_string(this->signature);
 
                 this->hash = std::hash<std::string>()(this->json_string.dump());
 
@@ -266,7 +275,7 @@ namespace Tx {
                 this->txouts = this->json_string["txouts"];
                 this->hash = this->json_string["hash"];
                 this->author_key = this->json_string["author_key"];
-                this->signature = this->json_string["signature"];
+                this->signature = hex_to_string(this->json_string["signature"]);
             }  
 
             /**
@@ -282,8 +291,7 @@ namespace Tx {
                     ERROR SIGNATURE : DOESN'T HAVE 
                 */
                 this->signature = ECDSA::sign(private_key_filepath, std::to_string(this->hash));
-                std::cout << this->signature << std::endl;
-                this->json_string["signature"] = this->signature;
+                this->json_string["signature"] = string_to_hex(this->signature);
             }
 
             bool verify_transaction() {
@@ -293,6 +301,40 @@ namespace Tx {
             bool is_balanced() {
                 return (unsigned long)this->txins["total"] == (unsigned long)this->txouts["total"];
             }
+
+        private:
+            std::string string_to_hex(const std::string& in) {
+                std::stringstream ss;
+
+                ss << std::hex << std::setfill('0');
+                for (size_t i = 0; in.length() > i; ++i) {
+                    ss << std::setw(2) << static_cast<unsigned int>(static_cast<unsigned char>(in[i]));
+                }
+
+                return ss.str(); 
+            }
+
+            std::string hex_to_string(const std::string& in) {
+                std::string output;
+
+                if ((in.length() % 2) != 0) {
+                    throw std::runtime_error("String is not valid length ...");
+                }
+
+                size_t cnt = in.length() / 2;
+
+                for (size_t i = 0; cnt > i; ++i) {
+                    uint32_t s = 0;
+                    std::stringstream ss;
+                    ss << std::hex << in.substr(i * 2, 2);
+                    ss >> s;
+
+                    output.push_back(static_cast<unsigned char>(s));
+                }
+
+                return output;
+            }
+
     };
 }
 
