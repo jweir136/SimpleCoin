@@ -46,7 +46,7 @@ class Blockchain {
             for (std::size_t current_hash : this->json_string["hashes"]) {
                 Block* current_block = new Block(this->json_string["blocks"][std::to_string(current_hash)]);
 
-                if (!current_block->is_valid())
+                if (!current_block->is_valid() || !current_block->is_nonce_valid())
                     return false;
 
                 delete current_block;

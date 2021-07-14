@@ -45,7 +45,7 @@ TEST_CASE("blockchain", "[]") {
         REQUIRE(chain->get_block(blockobj->hash) == blockobj->to_json());
     }
 
-    REQUIRE(chain->verify());
+    REQUIRE(!chain->verify());
 
     delete txins;
     delete txouts;
