@@ -278,6 +278,9 @@ namespace Tx {
             }   
 
             void sign_transaction(std::string private_key_filepath) {
+                /*
+                    ERROR SIGNATURE : HAS NONASCII CHARACTERS
+                */
                 this->signature = ECDSA::sign(private_key_filepath, std::to_string(this->hash));
                 this->json_string["signature"] = this->signature;
             }

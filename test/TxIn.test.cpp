@@ -58,14 +58,14 @@ TEST_CASE("txins","[]") {
 TEST_CASE("txout", "[]") {
     srand(time(NULL));
     unsigned int amount;
-    std::string reciever = "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+giOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==-----END PUBLIC KEY-----";
+    std::string key = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEvo2EhDT60gPW+8BRq7iB0SkBn+UE\nSOcts5pJSiPb+7uL6jrVQYyyyyVvePXwbMvQBAkl7MuycLry0w9UTEwNDg==\n-----END PUBLIC KEY-----";
     Tx::TxOut* txout;
 
     for (int i = 0; i < 10; i++) {
         amount = rand() % 10000;
 
         Tx::TxOut* txout;
-        txout = new Tx::TxOut(amount, reciever);
+        txout = new Tx::TxOut(amount, key);
         Tx::TxOut* newtxout;
         newtxout = new Tx::TxOut(txout->to_json());
 
@@ -80,7 +80,7 @@ TEST_CASE("txout", "[]") {
 TEST_CASE("txouts","[]") {
     srand(time(NULL));
     unsigned int amount;
-    std::string reciever = "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+giOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==-----END PUBLIC KEY-----";
+    std::string key = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEvo2EhDT60gPW+8BRq7iB0SkBn+UE\nSOcts5pJSiPb+7uL6jrVQYyyyyVvePXwbMvQBAkl7MuycLry0w9UTEwNDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txins = new Tx::TxOuts();
     Tx::TxOuts* newtxins;
@@ -88,7 +88,7 @@ TEST_CASE("txouts","[]") {
     for (int i = 0; i < 10; i++) {
         amount = rand() % 10000;
 
-        txins->add_txout(amount, reciever);
+        txins->add_txout(amount, key);
         newtxins = new Tx::TxOuts(txins->to_json());
 
         REQUIRE(txins->json_string == newtxins->json_string);
@@ -102,8 +102,7 @@ TEST_CASE("txouts","[]") {
 TEST_CASE("trans", "[]") {
     srand(time(NULL));
     unsigned int amount;
-    std::string reciever = "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+giOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==-----END PUBLIC KEY-----";
-    std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAED9y4qJt/O+YyHJJcEpca5Trtc3gD\nH5mpT2Ef3SabY++EDnAdEXCghugxnh/mVAUrCxIngNQcU2uSs5S5kN9xww==\n-----END PUBLIC KEY-----";
+    std::string key = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEvo2EhDT60gPW+8BRq7iB0SkBn+UE\nSOcts5pJSiPb+7uL6jrVQYyyyyVvePXwbMvQBAkl7MuycLry0w9UTEwNDg==\n-----END PUBLIC KEY-----";
 
     Tx::TxOuts* txouts = new Tx::TxOuts();
 
@@ -118,17 +117,17 @@ TEST_CASE("trans", "[]") {
     for (int i = 0; i < 10; i++) {
         amount = rand() % 1000;
 
-        txouts->add_txout(amount, reciever);
+        txouts->add_txout(amount, key);
 
         block = rand() % 1000;
         tx = rand() % 1000;
 
         txins->add_txin(amount, block, tx);
 
-        trans = new Tx::Transaction(txins->to_json(), txouts->to_json(), author);
+        trans = new Tx::Transaction(txins->to_json(), txouts->to_json(), key);
         trans2 = new Tx::Transaction(trans->to_json());
 
-        trans->sign_transaction("test/Cryptography/priv.pem");
+        trans->sign_transaction("test/Cryptography/jake_priv.pem");
 
         REQUIRE(trans->epoch == trans2->epoch);
         REQUIRE(trans->hash == trans2->hash);
