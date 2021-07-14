@@ -58,9 +58,9 @@ class Block {
         }
 
         void compute_nonce() {
-            while ((this->last_block + this->hash + this->nonce) % 1000 != 0) {
+            std::size_t current_hash = std::hash<std::string>()(std::to_string(this->last_block) + std::to_string(this->hash) + std::to_string(this->nonce));
+            while (current_hash % 1000 == 0)
                 this->nonce = rand() % 0xffffffffffffffff;
-            }
         }
 
         std::string to_json() {
@@ -74,7 +74,7 @@ class Block {
         }
 
         bool is_nonce_valid() {
-            return (this->last_block + this->hash + this->nonce) % 1000 == 0;
+            return std::hash<std::string>()(std::to_string(this->last_block) + std::to_string(this->hash) + std::to_string(this->nonce)) % 1000 == 0;
         }
 
         bool is_valid() {
