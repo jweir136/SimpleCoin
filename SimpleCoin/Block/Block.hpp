@@ -73,6 +73,19 @@ class Block {
             return this->json_string["transactions"][hash];
         }
 
+        bool is_valid() {
+            for (std::size_t current_hash : this->json_string["hashes"]) {
+                Tx::Transaction*  current_transaction = new Tx::Transaction(this->json_string["transactions"][std::to_string(current_hash)]);
+
+                if (!current_transaction->is_balanced() || !current_transaction->verify_transaction())
+                    return false;
+
+                delete current_transaction;
+            }
+
+            return true;
+        }
+
     private:
         std::size_t compute_hash() {
             std::string epoch_string = std::to_string(this->epoch);

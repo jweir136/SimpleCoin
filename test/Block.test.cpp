@@ -43,6 +43,8 @@ TEST_CASE("block", "[]") {
         REQUIRE(blockobj->get_transaction(std::to_string(trans->hash)) == trans->to_json());
     }
 
+    REQUIRE(blockobj->is_valid());
+
     delete txins;
     delete txouts;
     delete trans;
