@@ -42,12 +42,10 @@ TEST_CASE("blockchain", "[]") {
         chain2 = new Blockchain(chain->to_json());
 
         REQUIRE(chain->json_string == chain2->json_string);
-        REQUIRE(chain->blocks == chain2->blocks);
-        REQUIRE(chain->hash == chain2->hash);
         REQUIRE(chain->get_block(blockobj->hash) == blockobj->to_json());
     }
 
-    REQUIRE(chain->verify() == false);
+    REQUIRE(chain->verify());
 
     delete txins;
     delete txouts;

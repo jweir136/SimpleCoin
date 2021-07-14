@@ -15,54 +15,48 @@ using namespace nlohmann;
 class Blockchain {
     public:
         json        json_string;
-        json        blocks;
-        std::size_t hash;
         std::size_t size;
+        json        hashes;
 
         Blockchain() {
             this->size = 0;
-            this->hash = 0;
-            this->blocks = {};
+            this->hashes = {};
 
-            this->json_string["blocks"] = this->blocks;
-            this->json_string["hash"] = this->hash;
+            this->json_string["hashes"] = this->hashes;
         }
 
         Blockchain(std::string json_string) {
             this->json_string = json::parse(json_string);
-            this->blocks = this->json_string["blocks"];
-            this->hash = this->json_string["hash"];
+
             this->size = this->json_string["size"];
+            this->hashes = this->json_string["hashes"];
         }
 
         void add_block(std::string block) {
-            this->blocks.push_back(json::parse(block));
-            this->hash = std::hash<std::string>()(this->blocks.dump());
+            std::size_t block_hash = json::parse(block)["hash"];
+            this->hashes.push_back(block_hash);
+            this->json_string["blocks"][std::to_string(block_hash)] = block;
             this->size++;
 
-            this->json_string["blocks"] = this->blocks;
-            this->json_string["hash"] = this->hash;
             this->json_string["size"] = this->size;
+            this->json_string["hashes"] = this->hashes;
         }
 
         bool verify() {
-            for (int i = 0; i < this->size; i++) {
-                auto block = this->json_string["blocks"][i];
-                if (((std::size_t)block["hash"] + (unsigned long long)block["nonce"] + (std::size_t)block["last_block"]) % 1000 != 0)
+            for (std::size_t current_hash : this->json_string["hashes"]) {
+                Block* current_block = new Block(this->json_string["blocks"][std::to_string(current_hash)]);
+
+                if (!current_block->is_valid())
                     return false;
+
+                delete current_block;
             }
 
             return true;
         }
 
         std::string get_block(std::size_t hash) {
-            for (int i = 0; i < this->size; i++) {
-                auto block = this->json_string["blocks"][i];
-                if (block["hash"] == hash)
-                    return block.dump();
-            }
-
-            return NULL;
+            return this->json_string["blocks"][std::to_string(hash)];
         }
 
         std::string to_json() {
