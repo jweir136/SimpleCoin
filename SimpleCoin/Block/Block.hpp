@@ -73,6 +73,10 @@ class Block {
             return this->json_string["transactions"][hash];
         }
 
+        bool is_nonce_valid() {
+            return (this->last_block + this->hash + this->nonce) % 1000 == 0;
+        }
+
         bool is_valid() {
             for (std::size_t current_hash : this->json_string["hashes"]) {
                 Tx::Transaction*  current_transaction = new Tx::Transaction(this->json_string["transactions"][std::to_string(current_hash)]);
