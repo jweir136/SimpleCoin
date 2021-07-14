@@ -20,6 +20,7 @@ class Block {
         bool                empty;
         json                json_string;
         std::size_t         last_block;
+        json                hashes;
 
         Block() {
             this->epoch = time(NULL);
@@ -27,11 +28,13 @@ class Block {
             this->nonce = 0;
             this->empty = true;
             this->last_block = 0;
+            this->hashes = {};
             
             this->json_string["last_block"] = this->last_block;
             this->json_string["time"] = this->epoch;
             this->json_string["hash"] = this->hash;
             this->json_string["nonce"] = this->nonce;
+            this->json_string["hashes"] = this->hashes;
         }
 
         Block(std::string json_string) {
@@ -42,13 +45,16 @@ class Block {
             this->epoch = this->json_string["time"];
             this->hash = this->json_string["hash"];
             this->nonce = this->json_string["nonce"];
+            this->hashes = this->json_string["hashes"];
         }
 
         void add_transaction(std::string transaction_json) {
             std::size_t transaction_hash = json::parse(transaction_json)["hash"];
             this->json_string["transactions"][std::to_string(transaction_hash)] = transaction_json;
+            this->hashes.push_back(transaction_hash);
             this->hash = compute_hash();
             this->json_string["hash"] = this->hash;
+            this->json_string["hashes"] = this->hashes;
         }
 
         void compute_nonce() {
@@ -65,6 +71,19 @@ class Block {
 
         std::string get_transaction(std::string hash) {
             return this->json_string["transactions"][hash];
+        }
+
+        bool is_valid() {
+            for (std::size_t current_hash : this->json_string["hashes"]) {
+                Tx::Transaction*  current_transaction = new Tx::Transaction(this->json_string["transactions"][std::to_string(current_hash)]);
+
+                if (!current_transaction->is_balanced() || !current_transaction->verify_transaction())
+                    return false;
+
+                delete current_transaction;
+            }
+
+            return true;
         }
 
     private:
