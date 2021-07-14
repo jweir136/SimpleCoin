@@ -7,7 +7,7 @@
 TEST_CASE("signing", "[]") {
     std::string test = std::to_string(123);
 
-    ECDSA::generate_keys("test/Cryptography/pub.pem", "test/Cryptography/priv.pem");
+    ECDSA::generate_keys("test/Cryptography/pub2.pem", "test/Cryptography/priv2.pem");
     std::string sig = ECDSA::sign("test/Cryptography/priv.pem", test);
 
     REQUIRE(ECDSA::verify("test/Cryptography/pub.pem", test, sig));
