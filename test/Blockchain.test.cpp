@@ -6,6 +6,12 @@
 #include <ctime>
 #include <string>
 
+TEST_CASE("mock-blockchain", "[]") {
+    unsigned int amount[50] = { 66, 31, 57, 68, 83, 64, 24, 90, 72, 12, 13, 69, 52, 42, 41 };
+    std::string reciever = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
+    std::string author = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkculYE8/uBwUC8tST0DTZ0bWQ+gi\nOdsPVDp0t4657MyHvwZIIh9giKvNYcF0uuw3hrMBpX2nESD8ypdiUNlgDg==\n-----END PUBLIC KEY-----";
+};
+
 TEST_CASE("blockchain", "[]") {
     srand(time(NULL));
     unsigned int amount;

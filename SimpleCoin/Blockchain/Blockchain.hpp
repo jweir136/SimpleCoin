@@ -23,6 +23,7 @@ class Blockchain {
             this->hashes = {};
 
             this->json_string["hashes"] = this->hashes;
+            this->json_string["size"] = this->size;
         }
 
         Blockchain(std::string json_string) {
