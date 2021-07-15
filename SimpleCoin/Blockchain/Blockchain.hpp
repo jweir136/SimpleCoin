@@ -72,6 +72,26 @@ class Blockchain {
         }
 
     private:
+        unsigned int get_txin_amount(std::size_t block_hash, std::size_t transaction_hash, std::string user_key) {
+            try {
+                Block block = Block(get_block(block_hash));
+                Tx::Transaction trans = Tx::Transaction(block.get_transaction(std::to_string(transaction_hash)));
+
+                unsigned int total = 0;
+
+                for (auto txout : trans.txouts["txouts"]) {
+                    Tx::TxOut out = Tx::TxOut(txout);
+
+                    if (out.reciever == user_key)
+                        total += (unsigned int)out.amount;
+                }
+
+                return total;
+            } catch(...) {
+                throw std::runtime_error("Error: Cannot get TXIN amount");
+            }
+        }
+        
         bool txin_exists(std::size_t block_hash, std::size_t transaction_hash) {
             try {
                 Block block = Block(get_block(block_hash));

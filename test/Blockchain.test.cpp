@@ -18,8 +18,8 @@ TEST_CASE("mock-blockchain", "[]") {
         std::string katie = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEHbAzzNc3BXWI619W5W53bmEUlPP6\niO14u4O0GeliUj+U2ZHJ9atbkanpNhtgjoIALYvbM9pBQn2kC/Yb3hTh7Q==\n-----END PUBLIC KEY-----";
         std::string ethan = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEOr1LMSGxb7P3JoCoj/Z4J93C09Mi\nUT5PtVSGWRJRUisRdxJFmVBEB+52T6nY1snpWW9kgQizJcebwaTJtO4yXw==\n-----END PUBLIC KEY-----";
 
-        Tx::TxIn txin = Tx::TxIn(amount[0], 0, 0);
-        Tx::TxOut txout = Tx::TxOut(amount[0], ryan);
+        Tx::TxIn txin = Tx::TxIn(66, 0, 0);
+        Tx::TxOut txout = Tx::TxOut(66, ryan);
 
         Tx::TxIns txins = Tx::TxIns();
         txins.add_txin(txin.to_json());
@@ -112,8 +112,6 @@ TEST_CASE("mock-blockchain", "[]") {
 
         chain.add_block(block.to_json());
     }
-
-    chain.get_index(0);
 };
 
 TEST_CASE("blockchain", "[]") {
