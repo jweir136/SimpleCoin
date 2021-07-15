@@ -62,6 +62,13 @@ class Blockchain {
             return this->json_string["blocks"][std::to_string(hash)];
         }
 
+        std::string get_index(std::size_t index) {
+            std::size_t hash = this->json_string["hashes"][index];
+            std::string selected_block = this->json_string["blocks"][std::to_string(hash)];
+            
+            return selected_block;
+        }
+
         std::string to_json() {
             return this->json_string.dump();
         }

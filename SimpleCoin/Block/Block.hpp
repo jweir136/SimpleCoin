@@ -63,6 +63,12 @@ class Block {
                 this->nonce = rand() % 0xffffffffffffffff;
         }
 
+        std::string get_index(std::size_t index) {
+            std::size_t selected_hash = this->json_string["hashes"][index];
+            
+            return this->json_string["transactions"][std::to_string(selected_hash)];
+        }
+
         std::string to_json() {
             this->json_string["hash"] = compute_hash();
 
