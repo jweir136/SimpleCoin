@@ -111,7 +111,6 @@ TEST_CASE("mock-blockchain", "[]") {
         block.add_transaction(katie_to_ethan.to_json());
 
         chain.add_block(block.to_json());
-
     }
 
     chain.get_index(0);

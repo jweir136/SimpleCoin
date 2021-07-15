@@ -70,6 +70,18 @@ class Blockchain {
         std::string to_json() {
             return this->json_string.dump();
         }
+
+    private:
+        bool txin_exists(std::size_t block_hash, std::size_t transaction_hash) {
+            try {
+                Block block = Block(get_block(block_hash));
+                Tx::Transaction trans = Tx::Transaction(block.get_transaction(std::to_string(transaction_hash)));
+
+                return true;
+            } catch (...) {
+                return false;
+            }
+        }
 };
 
 #endif
